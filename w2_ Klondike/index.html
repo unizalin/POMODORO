@@ -40,14 +40,56 @@
   border-radius: 50%;
   background-color: steelblue;
 }
-
+#order-decks{
+  display: flex;
+  justify-content: space-between;
+}
+.cache-deck,.done-deck{
+  width: 152px;
+  height: 200px;
+}
+#un-order-decks{
+  display: flex;
+  justify-content: space-between;
+}
+.un-order-deck{
+  position: relative;
+  height: 600px;
+  width: 152px;
+  font-size: 16px;
+  user-select: none;
+}
+.un-order-deck{
+  position: relative;
+  height: 600px;
+  width: 152px;
+  font-size: 16px;
+  user-select: none;
+}
+.card{
+  width: 100%;
+  margin: 0 auto;
+  position: absolute;
+}
+.poker img{
+  display: block;
+  margin: 0 auto;
+}
+*{
+  outline: 1px solid black;
+}
 </style>
 <body>
-  <div id="drag-drop-basic">
-    <div id="source-container">
-      <div id="drag-source" draggable="true"></div>
+  <!-- <div id="drag-drop-basic"> -->
+    <!-- <div id="source-container"> -->
+      <!-- <div id="drag-source" draggable="true"></div> -->
+    <!-- </div> -->
+    <!-- <div id="target-container"></div> -->
+  <!-- </div> -->
+  <div class="container">
+    <div id="order-decks"></div>
+    <div id="un-order-decks">
     </div>
-    <div id="target-container"></div>
   </div>
   <script src="index.js"></script>
 </body>
