@@ -67,7 +67,7 @@ function numberToSuit(number) {
   if(number>=40 && number<=52)return 'club'
 
 }
-console.log('unOrderDecks',unOrderDecks)
+// console.log('unOrderDecks',unOrderDecks)
 
 
 const pokerArray=[]
@@ -85,7 +85,7 @@ function shuffle(arr) {
   return arr 
 }
 const shufflePoker = shuffle(pokerArray)
-console.log(pokerArray)
+// console.log(pokerArray)
 pokerArray.map((number)=>{
   // console.log(number)
   if(ignoreDeck.indexOf(number)!==-1)return
@@ -100,11 +100,13 @@ pokerArray.map((number)=>{
 const orderDecksElem = document.getElementById('order-decks')
 function flushGame() {
   for(let i=0 ;i<8;i++){
-    console.log(i)
+    // console.log(i)
     const orderDeckElem = document.createElement('div')
     //左方暫存
     if(i<=3){
-      orderDeckElem.classList.add('cache-deck')
+      orderDeckElem.className='cache-deck'
+      orderDeckElem.id=`cache-deck-${i}`
+      orderDeckElem.deckNumber=i
       if(leftTopDeck[i].length==1){
         const poker = leftTopDeck[i][0]
         orderDeckElem.cardNumber=poker
@@ -116,6 +118,7 @@ function flushGame() {
       }
     }else{
       orderDeckElem.classList.add('done-deck')
+      orderDeckElem.id=`done-deck-${i}`
       const numberOfIndex = i %4
       const card = rightTopDeck[numberOfIndex].slice(-1)[0]
       orderDeckElem.cardNumber=card
@@ -142,21 +145,22 @@ function test(){
     unOrderDeckElem.classList.add(`un-order-deck${index}`)
 
     decks.forEach((card,cardIndex)=>{
-      console.log(card,cardIndex)
+      // console.log(card,cardIndex)
       const unOrderDeckCardElem = document.createElement('div')
       if(!isGamePause && cardIndex +1=== decks.length){
         unOrderDeckCardElem.draggable=true
       }
       unOrderDeckCardElem.classList.add("card")
+      unOrderDeckCardElem.style.position='absolute'
       if(!init){
         unOrderDeckCardElem.style.transition = 'all .5s'
-        unOrderDeckCardElem.style.top = '-1000px'
-        unOrderDeckCardElem.style.left = '-2000px'
+        // unOrderDeckCardElem.style.top = '-1000px'
+        // unOrderDeckCardElem.style.left = '-2000px'
         // unOrderDeckCardElem.style.opacity = '0'
-        setTimeout(() => {
+        // setTimeout(() => {
           unOrderDeckCardElem.style.top= `${cardIndex * 30}px`
           unOrderDeckCardElem.style.left = '0px'
-        }, cardIndex*index*30);
+        // }, cardIndex*index*30);
       }else{
         unOrderDeckCardElem.style.top= `${cardIndex * 30}px`
       }
@@ -164,9 +168,7 @@ function test(){
       unOrderDeckCardElem.cardNumber = card
       unOrderDeckCardElem.deckNumber = index
       unOrderDeckCardElem.innerHTML=`
-      <div class="poker">
-        <img src="./images/${numberToSuit(card)}${numberToSymbol(card)}.svg" alt="">
-        </div>
+          <img src="./images/${numberToSuit(card)}${numberToSymbol(card)}.svg" alt="">
       `
       unOrderDeckElem.appendChild(unOrderDeckCardElem)
     })
@@ -177,82 +179,149 @@ function test(){
 test()
 // init = true
 
-function Card(suit, symbol) {
-  this.suit = suit;
-  this.symbol = symbol;
+function dragStart (e) {
+  e.defaultPrevent;
+  let target=e.target.parentNode
+  // console.log(target.deckNumber)
+  // console.log(target.cardNumber)
+  if(isGamePause)return
+  onDragNumber = target.cardNumber
+  onDragDeckNumber = target.deckNumber
+  // console.log('dragStart',e.target.deckNumber)
+
 }
 
-Card.prototype.toString = function() {
-  return this.suit + this.symbol;
-};
+function dragEnter (e) {
+  let target = e.target.parentNode
+  // console.log('dragEnter',e.target)
+  if(e.target.id.indexOf('cache-deck')>-1)isCacheDeck=true
+  if(e.target.id.indexOf('done-deck')>-1)isCacheDeck=true
+  onDropNumber = target.cardNumber
+  onDropDeckNumber = target.deckNumber
+  if(onDropNumber == onDragNumber)return
+  // if(e.target.classList.ind)
+}
 
-var Poker = function() {
-  function suit(number) {
-      switch(parseInt((number - 1) / 13)) {
-          case 0 : return "桃";
-          case 1 : return "心";
-          case 2 : return "磚";
-          case 3 : return "梅";
-      }
+function dragLeave (e) {
+  // console.log('dragLeave',e.target)
+  if(e.target.id.indexOf('order-decks')){
+    isCacheDeck = false
+    isSuccessDeck = false 
   }
-  
-  function symbol(number) {
-      var remain = number % 13;
-      switch(remain) {
-          case 0 : return 'K ';
-          case 1 : return 'A ';
-          case 11: return 'J ';
-          case 12: return 'Q ';
-          default: return remain + 
-              new Array(3 - (remain + '').length).join(' ');
-      }
+  if(e.target.id.indexOf('cache-deck')!=-1){
+    isCacheDeck = true
+    isSuccessDeck = false 
+    cacheDeckNumber=e.target.deckNumber
+    console.log(e.target.deckNumber)
   }
+  if(e.target.id.indexOf('done-deck')!=-1){
+    isCacheDeck = false
+    isSuccessDeck = true
+    cacheDeckNumber=e.target.deckNumber
+    console.log(e.target.deckNumber)
 
-  var cards = [];
-  for(var i = 0; i < 52; i++) {
-      cards.push(new Card(suit(i + 1), symbol(i + 1)));
   }
-  
-  return {
-      shuffle: function() {
-          for(var i = 0; i < cards.length; i++) {
-              var j = parseInt(Math.random() * cards.length - 1);
-              var tmp = cards[i];
-              cards[i] = cards[j];
-              cards[j] = tmp;
-          }
-          return cards.slice(0, cards.length);
+}
+
+function dragEnd (e) {
+  console.log('dragEnd',e)
+  if(isGamePause)return
+  console.log(isCacheDeck,cacheDeckNumber)
+  if(isCacheDeck&& onDragNumber==unOrderDecks[onDragDeckNumber].slice(-1)[0]){
+    console.log('我在左上')
+    if(leftTopDeck[cacheDeckNumber].length===1)return
+    timeMachine.push({
+      from:{
+        deckNumber:onDragDeckNumber,
+        cardNumber:onDragNumber
+      },
+      to:{
+        deckNumber: cacheDeckNumber,
+        cardNumber: onDragNumber
+      },
+      action: 'toCacheDeck'
+    })
+    unOrderDecks[onDragDeckNumber].pop()
+    leftTopDeck[cacheDeckNumber].push(onDragNumber)
+    refreshDrawAndFlush()
+    isCacheDeck=false
+  }
+  if(isSuccessDeck){
+    console.log('我在右邊')
+    if(onDragNumber != rightTopDeck[cacheDeckNumber].slice(-1)[0])return
+    timeMachine.push({
+      from:{
+        deckNumber:onDragDeckNumber,
+        cardNumber:onDragNumber
+      },
+      to:{
+        deckNumber: cacheDeckNumber,
+        cardNumber: onDragNumber
+      },
+      action: 'toSuccessDeck'
+    })
+    unOrderDecks[onDragDeckNumber].pop()
+    rightTopDeck[cacheDeckNumber].push(onDragNumber)
+    refreshDrawAndFlush()
+    isSuccessDeck = false
+  }
+  if(!isSuccessDeck&&!isCacheDeck){
+    console.log('下方')
+    const mathFloorDragNumber = Math.ceil(onDragNumber/13)
+    const mathFloorDropNumber = Math.ceil(onDropNumber/13)
+    // 黑＋紅 = 5 ; 數字要跟前一個比
+    let validPushCard = mathFloorDragNumber != mathFloorDropNumber && mathFloorDropNumber+mathFloorDragNumber!==5 && (onDropNumber%13===(onDragNumber%13)+1 || (onDropNumber%13===0 && onDragNumber%13===12) )
+    const isCacheCardDeck = e.target.parentNode.parentNode.id.indexOf('cache-deck')>-1
+    console.log(e.target.parentNode.parentNode)
+    console.log('isCacheCardDeck',isCacheCardDeck)
+    console.log('onDropNumber',onDropNumber,'onDragNumber',onDragNumber)
+    if(isCacheCardDeck){
+      console.log(validPushCard)
+      if(validPushCard){
+      
+        const cardCacheDeckNumber = e.target.parentNode.parentNode.id.split('-')[2]
+        console.log('cardCacheDeckNumber',cardCacheDeckNumber)
+        unOrderDecks[onDropDeckNumber].push(onDragNumber)
+        leftTopDeck[cardCacheDeckNumber].pop()
+        refreshDrawAndFlush()
+        return
       }
-  };
-}();
+    }
+    if(onDragNumber!=unOrderDecks[onDragDeckNumber].slice(-1)[0] || onDropNumber!=unOrderDecks[onDropDeckNumber].slice(-1)[0]){
+      isCacheDeck = false
+      isSuccessDeck = false
+      return
+    }
+    if(validPushCard){
+      console.log('validPush')
+      timeMachine.push({
+        from:{
+          deckNumber:onDragDeckNumber,
+          cardNumber:onDragNumber
+        },
+        to:{
+          deckNumber: cacheDeckNumber,
+          cardNumber: onDragNumber
+        },
+        action: 'toUnOrder'
+      })
+      unOrderDecks[onDragDeckNumber].pop()
+      unOrderDecks[onDropDeckNumber].push(onDragNumber)
+      refreshDrawAndFlush()
 
+    }
+  }
+}
 
+const container = document.getElementById('container')
+container.addEventListener('dragstart',dragStart)
+container.addEventListener('dragenter',dragEnter)
+container.addEventListener('dragleave',dragLeave)
+container.addEventListener('dragend',dragEnd)
 
-
-
-// let dragSource = document.querySelector('#drag-source')
-// dragSource.addEventListener('dragstart', dragStart)
-
-// let dropTarget = document.querySelector('#target-container')
-// dropTarget.addEventListener('drop', dropped)
-// dropTarget.addEventListener('dragenter', cancelDefault)
-// dropTarget.addEventListener('dragover', cancelDefault)
-
-// function cancelDefault (e) {
-//   e.preventDefault()
-//   e.stopPropagation()
-//   return false
-// }
-
-// function dragStart (e) {
-//   console.log('dragStart')
-//   e.dataTransfer.setData('text/plain', e.target.id)
-// }
-
-// function dropped (e) {
-//   console.log('dropped')
-//   cancelDefault(e)
-//   let id = e.dataTransfer.getData('text/plain')
-//   e.target.appendChild(document.querySelector('#' + id))
-// }
-// End of Drag and Drop Basic
+function refreshDrawAndFlush() {
+  unOrderDecksElem.innerHTML=''
+  orderDecksElem.innerHTML=''
+  test()
+  flushGame()
+}
