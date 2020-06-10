@@ -4,7 +4,7 @@
       <audio controls ref="audio" @canplay="getDuration" @timeupdate='onTimeUpdateListener' id="myMp3">
         <source id="test" src="../assets/music/Jim Yosef - Let You Go [NCS Release].mp3" type="audio/mpeg">
       </audio>
-      <div class="cdPlat cdPlayIngRotate"><img src="../assets/img/Jim Yosef - Let You Go.jpg" alt=""><div class="insideCicle"></div></div>
+      <div class="cdPlat "><img :class="isPlay ? 'cdPlayIngRotate' : ''" src="../assets/img/Jim Yosef - Let You Go.jpg" @click="isPlay = !isPlay, isPlay ? play() : pause();" alt=""><div class="insideCicle"></div></div>
       <div class="changeSong">
         <div class="back"></div>
         <div class="next"></div>
@@ -116,12 +116,10 @@ export default {
   img {
     width: 100%;
     border-radius: 50%;
-  }
-  .cdPlayIngRotate{
-    animation: cdPlaying 5s infinite;
+    animation: cdPlaying 4s infinite linear;
     animation-fill-mode: forwards;
     animation-delay: -0.5s;
-    
+    animation-play-state: paused;
     @keyframes cdPlaying {
       0%{
         transform: rotate(0deg);
@@ -130,6 +128,12 @@ export default {
         transform: rotate(1turn);
       }
     }
+
+  }
+  .cdPlayIngRotate{
+    animation-play-state: running;
+  }
+  .cdPlayIngRotate{
   }
 
   .insideCicle {
