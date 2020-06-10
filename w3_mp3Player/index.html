@@ -15,9 +15,6 @@
       $("#player").jPlayer({
 
         ready: function () {
-          console.log($(this).jPlayer("setMedia", {
-            mp3: "./music/Jim Yosef - Let You Go [NCS Release].mp3"
-          }))
           $(this).jPlayer("setMedia", {
             mp3: "./music/Jim Yosef - Let You Go [NCS Release].mp3"
           });
@@ -40,6 +37,10 @@
           <div class="jp-controls">
             <!--播放暫停按鈕-->
             <button class="jp-play" role="button" tabindex="0">play</button>
+          </div>
+          <div class="jp-controls">
+            <!--播放暫停按鈕-->
+            <button class="jp-stop" role="button" tabindex="0">pause</button>
           </div>
           <div class="jp-progress">
             <!--進度條-->
