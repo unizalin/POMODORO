@@ -4,13 +4,13 @@
 // 左方暫存
 let leftTopDeck=[[],[],[],[]]
 // 右方集結
-let rightTopDeck=[[1],[14],[27],[40]]
+let rightTopDeck=[[1],[14],[],[]]
 // 下方混淆
 let unOrderDecks=[[],[],[],[],[],[],[],[]]
 //時光機
 let timeMachine=[]
 //忽略牌型
-let ignoreDeck=[1,14,27,40]
+let ignoreDeck=[1,14]
 
 // 拖曳用
 let onDragNumber = null 
@@ -109,12 +109,11 @@ function flushGame() {
       orderDeckElem.deckNumber=i
       if(leftTopDeck[i].length==1){
         const poker = leftTopDeck[i][0]
-        if(!isGamePause){
-          orderDeckElem.draggable=true
-        }
         orderDeckElem.cardNumber=poker
         orderDeckElem.innerHTML=`
+          <div class="card">
             <img src="./images/${numberToSuit(poker)}${numberToSymbol(poker)}.svg" alt="">
+          </div>
         `
       }
     }else{
@@ -126,7 +125,9 @@ function flushGame() {
       orderDeckElem.deckNumber=numberOfIndex
       if(card){
         orderDeckElem.innerHTML=`
+        <div class="card">
           <img src="./images/${numberToSuit(card)}${numberToSymbol(card)}.svg" alt="">
+        </div>ＺＺＺＺ
         `
       }
     }
@@ -140,8 +141,8 @@ const unOrderDecksElem = document.getElementById('un-order-decks')
 function test(){
   unOrderDecks.forEach((decks,index)=>{
     const unOrderDeckElem = document.createElement('div')
-    unOrderDeckElem.className="un-order-deck"
-    unOrderDeckElem.id=`un-order-deck${index}`
+    unOrderDeckElem.classList.add("un-order-deck")
+    unOrderDeckElem.classList.add(`un-order-deck${index}`)
 
     decks.forEach((card,cardIndex)=>{
       // console.log(card,cardIndex)
@@ -167,9 +168,7 @@ function test(){
       unOrderDeckCardElem.cardNumber = card
       unOrderDeckCardElem.deckNumber = index
       unOrderDeckCardElem.innerHTML=`
-          <div>
-            <img src="./images/${numberToSuit(card)}${numberToSymbol(card)}.svg" alt="">
-          </div>～
+          <img src="./images/${numberToSuit(card)}${numberToSymbol(card)}.svg" alt="">
       `
       unOrderDeckElem.appendChild(unOrderDeckCardElem)
     })
@@ -187,27 +186,25 @@ function dragStart (e) {
   if(isGamePause)return
   onDragNumber = target.cardNumber
   onDragDeckNumber = target.deckNumber
-  // console.log('dragStart onDragNumber',onDragNumber)
-  // console.log('dragStart onDragDeckNumber',onDragDeckNumber)
+  console.log('dragStart onDragNumber',onDragNumber)
 
 }
 
 function dragEnter (e) {
   // let target = e.target.parentNode
   // console.log(target)
-  // console.log('dragEnter cache',e.target.id.indexOf('cache-deck'))
+  console.log('dragEnter cache',e.target.id.indexOf('cache-deck'))
   // console.log('dragEnter done',e.target.parentNode.id.cardNumber)
-  if(e.target.parentNode.id.indexOf('cache-deck')>-1)isCacheDeck=true
+  if(e.target.id.indexOf('cache-deck')>-1)isCacheDeck=true
   if(e.target.parentNode.id.indexOf('done-deck')>-1)isSuccessDeck=true
-  onDropNumber = e.target.parentNode.cardNumber
-  onDropDeckNumber = e.target.deckNumber
-  console.log('dragEnter',onDropNumber,onDropDeckNumber)
+  // onDropNumber = e.target.cardNumber
+  // onDropDeckNumber = target.deckNumber
   if(onDropNumber == onDragNumber)return
   console.log('isCacheDeck',isCacheDeck)
 }
 
 function dragLeave (e) {
-  // console.log('dragLeave',e.target.parentNode)
+  console.log('dragLeave',e.target.parentNode.parentNode)
   // if(e.target.parentNode.id.indexOf('order-decks')){
   //   isCacheDeck = false
   //   isSuccessDeck = false 
@@ -216,19 +213,19 @@ function dragLeave (e) {
     isCacheDeck = true
     isSuccessDeck = false 
     cacheDeckNumber=e.target.parentNode.deckNumber
-    // console.log('cache-deck','cacheDeckNumber',cacheDeckNumber)
+    console.log('cache-deck','cacheDeckNumber',cacheDeckNumber)
   }
   if(e.target.parentNode.id.indexOf('done-deck')!=-1){
     isCacheDeck = false
     isSuccessDeck = true
     cacheDeckNumber=e.target.parentNode.deckNumber
-    // console.log('done-deck','cacheDeckNumber',cacheDeckNumber)
+    console.log('done-deck','cacheDeckNumber',cacheDeckNumber)
 
   }
   // console.log('dragLeave cacheDeckNumber',e.target.deckNumber)
   // console.log('dragLeave isCacheDeck',isCacheDeck)
-  // console.log('dragLeave isSuccessDeck',isSuccessDeck)
-  // console.log('dragLeave isCacheDeck',isCacheDeck)
+  console.log('dragLeave isSuccessDeck',isSuccessDeck)
+  console.log('dragLeave isCacheDeck',isCacheDeck)
 
 }
 
@@ -238,10 +235,9 @@ function dragEnd (e) {
   // console.log('onDragNumber',onDragNumber)
   // console.log('isSuccessDeck',isSuccessDeck)
   // console.log('onDragDeckNumber',onDragDeckNumber)
-  // console.log(isCacheDeck)
+  console.log(isCacheDeck)
   if(isCacheDeck&& onDragNumber==unOrderDecks[onDragDeckNumber].slice(-1)[0]){
     console.log('我到左上')
-    // console.log(cacheDeckNumber)
     if(leftTopDeck[cacheDeckNumber].length===1)return
     timeMachine.push({
       from:{
@@ -262,8 +258,8 @@ function dragEnd (e) {
   console.log('isSuccessDeck',isSuccessDeck)
   if(isSuccessDeck){
     console.log('我到右上')
-    // console.log('cacheDeckNumber',cacheDeckNumber)
-    // console.log('onDragNumber',onDragNumber,rightTopDeck[cacheDeckNumber].slice(-1)[0] +1)
+    console.log('cacheDeckNumber',cacheDeckNumber)
+    console.log('onDragNumber',onDragNumber,rightTopDeck[cacheDeckNumber].slice(-1)[0] +1)
     if(onDragNumber != rightTopDeck[cacheDeckNumber].slice(-1)[0] + 1)return
     timeMachine.push({
       from:{

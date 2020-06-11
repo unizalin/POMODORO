@@ -24,7 +24,7 @@
     <div class="timeLine">
       <div class="timeCurrant">{{ currentTime | timeFormat }}</div>
       <div class="timeControl">
-        <input type="range" max="100" min="0" :value="progress" @change="changeProgress">
+        <input type="range" max="100" min="0" class="timeControlBar" :value="progress" @change="changeProgress">
       </div>
       <div class="timeTotal">{{ durationTime | timeFormat }}</div>
     </div>
@@ -168,9 +168,10 @@ iframe {
 .cdPlat {
   width: 600px;
   height: 600px;
-  border: 1px solid black;
+  border: 3px solid black;
   margin: 0 auto;
   border-radius: 50%;
+  box-shadow: 0px 3px 6px #00000029;
   img {
     width: 100%;
     border-radius: 50%;
@@ -199,7 +200,7 @@ iframe {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 1px solid black;
+    border: 3px solid black;
     border-radius: 50%;
   }
 }
@@ -207,10 +208,11 @@ iframe {
 .buttonList {
   display: flex;
 }
-.back,.next,.play,.pause {
-  width: 50px;
-  height: 50px;
+.back,.next {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
+  border: 3px solid black;
   box-shadow: 0px 2px 2px #333;
   cursor: pointer;
   position: relative;
@@ -240,40 +242,57 @@ iframe {
   transform: translateY(-50%);
 }
 
+.play::after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 16px 0 16px 27px;
+  border-color: transparent transparent transparent #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .play::before {
   content: " ";
   display: block;
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 15px 0 15px 26px;
-  border-color: transparent transparent transparent #007bff;
+  border-width: 22px 0 22px 38.1px;
+  border-color: transparent transparent transparent black;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 53%;
   transform: translate(-50%, -50%);
 }
 .pause::before {
   content: "";
   display: block;
-  width: 5px;
-  height: 60%;
+  width: 13px;
+  height: 36px;
+  border: 3px solid #000000;
+  border-radius: 6px;
   position: absolute;
-  left: 30%;
+  left: 25%;
   top: 50%;
   transform: translateY(-50%);
-  background-color: black;
+  background-color: #fff;
 }
 .pause::after {
   content: "";
   display: block;
-  width: 5px;
-  height: 60%;
+  width: 13px;
+  height: 36px;
+  border: 3px solid #000000;
+  border-radius: 6px;
   position: absolute;
-  right: 30%;
+  right: 25%;
   top: 50%;
   transform: translateY(-50%);
-  background-color: black;
+  background-color: #fff;
 }
 
 .next::before {
@@ -308,14 +327,38 @@ iframe {
   justify-content: space-around;
   align-items: center;
   .musicStatus {
+    width: 92px;
+    height: 92px;
+    border: 3px solid black;
+    border-radius: 50%;
+    box-shadow: 0px 2px 2px #333;
+    cursor: pointer;
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+  }
+  .musicInfo {
+    text-align: left;
+    .artist {
+      font-size: 24px;
+      font-weight: bold;
+    }
   }
 }
 .timeLine {
   display: flex;
   justify-content: center;
   align-items: center;
+  .timeControlBar{
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    background-color: #333;
+    border: 3px solid black;
+    border-radius: 75px;
+  }
 }
 </style>
