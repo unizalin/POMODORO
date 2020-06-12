@@ -134,7 +134,7 @@ export default {
     this.getPlayerData();
   },
   updated() {
-    this.getPlayerState()
+    this.getPlayerState();
   }
 };
 </script>
@@ -143,7 +143,7 @@ export default {
 * {
   position: relative;
   box-sizing: border-box;
-  outline: 1px solid black;
+  // outline: 1px solid black;
 }
 iframe {
   width: 0;
@@ -151,6 +151,7 @@ iframe {
   display: none !important;
 }
 .play_form {
+  width: 100%;
   max-width: 800px;
   max-height: 800px;
 }
@@ -344,21 +345,101 @@ iframe {
       font-weight: bold;
     }
   }
+  .musicVolume {
+    appearance: none;
+    height: 9px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    border: 3px solid black;
+    border-radius: 75px;
+    input[type="range"]{
+      -webkit-appearance: none;
+      width: 200px;
+      outline: none; /* 避免點選會有藍線或虛線 */
+      background: none;
+      z-index: 1;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      position: relative; /* 設為相對位置，為了前後區塊的絕對位置而設定 */
+      width: 16px;
+      height: 25px;
+      background: #fff;
+      z-index: 4;
+      border: 2px solid black;
+      transition: 0.2s; /* 點選放大時候的漸變時間 */
+    }
+    input[type="range"]::-webkit-slider-thumb:before,
+    input[type="range"]::-webkit-slider-thumb:after { 
+      position: absolute;
+      top: 3px;
+      width: 2000px;          /* 長度很長沒關係，因為剛剛有用 overflow:hidden 了 */
+      height: 9px;
+      content: "";
+      display: block;
+      pointer-events: none;   /* 讓滑鼠可以點擊穿透偽元素，不然會點不到下面 */
+      transition:.2s;
+    }   
+    input[type="range"]::-webkit-slider-thumb:before {
+      left: -1997px;
+      background: #f22;
+    }
+    input[type="range"]::-webkit-slider-thumb:after {
+      left: 10px;
+      background: #edc;
+    }
+  }
 }
 .timeLine {
   display: flex;
   justify-content: center;
   align-items: center;
-  .timeControlBar{
+  .timeControlBar {
     appearance: none;
     width: 100%;
-    height: 4px;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    background-color: #333;
-    border: 3px solid black;
+    height: 9px;
+    // background-color: #fff;
+    border: 1px solid black;
     border-radius: 75px;
+  }
+  input[type="range"]{
+    -webkit-appearance: none;
+    width: 200px;
+    outline: none; /* 避免點選會有藍線或虛線 */
+    background: none;
+    z-index: 1;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    position: relative; /* 設為相對位置，為了前後區塊的絕對位置而設定 */
+    width: 16px;
+    height: 25px;
+    // background: #fff;
+    z-index: 4;
+    border: 2px solid black;
+    transition: 0.2s; /* 點選放大時候的漸變時間 */
+  }
+  input[type="range"]::-webkit-slider-thumb:before,
+  input[type="range"]::-webkit-slider-thumb:after {
+    position: absolute;
+    top: 3px;
+    width: 100px;          /* 長度很長沒關係，因為剛剛有用 overflow:hidden 了 */
+    height: 20px;
+    content:"";
+    display: block;
+    pointer-events: none;   /* 讓滑鼠可以點擊穿透偽元素，不然會點不到下面 */
+    transition:  .2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:before{
+    // left: -1997px;
+    background: #f22;
+  }
+  input[type="range"]::-webkit-slider-thumb:after {
+    // left: 10px;
+    background: #edc;
   }
 }
 </style>
