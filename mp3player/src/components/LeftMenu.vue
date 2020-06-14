@@ -1,5 +1,5 @@
 <template>
-  <div class="leftMenu"  :style="isShowList?'':`transform: translateX(-700px)translateY(-160px)rotate(36deg);`">
+  <div class="leftMenu"  :style="isShowList?'':`transform: translateX(-600px)translateY(-160px)rotate(36deg);`">
     <div class="outsideMenu">
       <div class="search">
         <input type="text" maxlength="5">
@@ -50,14 +50,14 @@ export default {
         artist: "Jim Yosef",
         videoId: "pQWZzoB7P1E",
         pic: `https://linkstorage.linkfire.com/medialinks/images/7b42ba6d-aea4-42c5-9ea6-7637c38da647/artwork-440x440.jpg`,
-        songTime: "",
+        songTime: "220",
         albumn: "NCS",
     },{
       songName: "Eternal",
       artist: "Marin Hoxha & Caravn",
       videoId: "9Jk9hQ4wUto",
       pic: `https://linkstorage.linkfire.com/medialinks/images/b5c70a68-414f-4461-8f0a-587204073f9a/artwork-440x440.jpg`,
-      songTime: "",
+      songTime: "244",
       albumn: "NCS",
     },{
       songName: "GET UP",
@@ -79,11 +79,12 @@ export default {
   height: 96%;
   border: 3px solid black;
   background: #fff;
-  display: flex;
   transition: 0.2s;
+  position: relative;
 }
 .outsideMenu {
   padding: 32px 0 0 8px;
+  height: 100%;
 }
 .insideContent {
   .title {
@@ -103,6 +104,10 @@ export default {
   background-color: #fff;
   border: 3px solid black;
   transform: translate(19% , 1%);
+  position: absolute;
+  top: 0;
+  right: -136px;
+  z-index: 4;
   .listNav {
     display: flex;
     justify-content: space-between;
@@ -124,6 +129,10 @@ export default {
   justify-content: space-between;
   padding: 20px 8px;
   border-bottom: 1px solid black;
+  cursor: pointer;
+  &:hover {
+    background: #C5C5C5;
+  }
   .leftInfo {
     .song {
       font-size: 18px;

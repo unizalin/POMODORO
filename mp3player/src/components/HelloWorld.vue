@@ -14,7 +14,7 @@
     <div class="controlList">
       <div class="musicInfo">
         <div class="artist">{{nowPlayIng.artist}}</div>
-        <div class="songName">{{nowPlayIng.songMame}}</div>
+        <div class="songName">{{nowPlayIng.songName}}</div>
       </div>
       <div class="musicStatus" :class="isPlay ? 'pause' : 'play'"  @click="isPlay = !isPlay, isPlay ? playing() : paused();"></div>
       <div class="musicVolume">
@@ -26,7 +26,7 @@
       <div class="timeControl">
         <input type="range" max="100" min="0" class="timeControlBar" :value="progress" @change="changeProgress">
       </div>
-      <div class="timeTotal">{{ durationTime | timeFormat }}</div>
+      <div class="timeTotal">{{ nowPlayIng.songTime | timeFormat }}</div>
     </div>
   </div>
 </template>
@@ -40,28 +40,36 @@ export default {
     return {
       videoId: "pQWZzoB7P1E",
       nowPlayIng: {
-        songMame: "Let You Go",
+        songName: "Let You Go",
         artist: "Jim Yosef",
         videoId: "pQWZzoB7P1E",
         pic: `https://linkstorage.linkfire.com/medialinks/images/7b42ba6d-aea4-42c5-9ea6-7637c38da647/artwork-440x440.jpg`,
+        songTime: "220",
+        albumn: "NCS"
       },
       isPlay: false,
       playList: [{
-        songMame: "Let You Go",
+        songName: "Let You Go",
         artist: "Jim Yosef",
         videoId: "pQWZzoB7P1E",
         pic: `https://linkstorage.linkfire.com/medialinks/images/7b42ba6d-aea4-42c5-9ea6-7637c38da647/artwork-440x440.jpg`,
-      },{
-        songMame: "Eternal",
-        artist: "Marin Hoxha & Caravn",
-        videoId: "9Jk9hQ4wUto",
-        pic: `https://linkstorage.linkfire.com/medialinks/images/b5c70a68-414f-4461-8f0a-587204073f9a/artwork-440x440.jpg`,
-      },{
-        songMame: "GET UP",
-        artist: `TOKYO MACHINE & Guy Arthur`,
-        videoId: "euw0w42g27",
-        pic: `https://linkstorage.linkfire.com/medialinks/images/f414f928-e610-4968-857f-a5fdb038084d/artwork-440x440.jpg`,
-      }],
+        songTime: "220",
+        albumn: "NCS",
+    },{
+      songName: "Eternal",
+      artist: "Marin Hoxha & Caravn",
+      videoId: "9Jk9hQ4wUto",
+      pic: `https://linkstorage.linkfire.com/medialinks/images/b5c70a68-414f-4461-8f0a-587204073f9a/artwork-440x440.jpg`,
+      songTime: "244",
+      albumn: "NCS",
+    },{
+      songName: "Stockholm Lights",
+      artist: `Diviners`,
+      videoId: "_Bs2dUtjDSI",
+      pic: `https://linkstorage.linkfire.com/medialinks/images/1f3a8d1a-2398-4365-8b99-5141754190f4/artwork-440x440.jpg`,
+      songTime: "173",
+      albumn: "NCS",
+    }],
       platListIndex: 0,
       currentTime: 0,
       durationTime: 0,
@@ -97,7 +105,7 @@ export default {
       await this.player.getCurrentTime();
       console.log(await this.player.getCurrentTime())
       this.currentTime = await this.player.getCurrentTime();
-      vm.progress = vm.currentTime/vm.durationTime*100;
+      vm.progress = vm.currentTime/vm.nowPlayIng.songTime*100;
     },
     async getPlayerState() {
       this.playerState = await this.player.getPlayerState()
@@ -116,6 +124,8 @@ export default {
       this.getPlayerState();
       let vm = this;
       vm.paused();
+      vm.progress = 0;
+      vm.player.seekTo(0, true);
       vm.platListIndex += index;
       vm.platListIndex = vm.platListIndex < 0 ? vm.playList.length - 1 : vm.platListIndex > vm.playList.length - 1 ? 0 : vm.platListIndex;
       vm.nowPlayIng = vm.playList[vm.platListIndex];
@@ -217,6 +227,9 @@ iframe {
   box-shadow: 0px 2px 2px #333;
   cursor: pointer;
   position: relative;
+  &:hover{
+      background-color: #00000029;
+  }
 }
 .back::before {
   content: ' ';
@@ -227,7 +240,8 @@ iframe {
   left: 20%;
   top: 50%;
   transform: translateY(-50%);
-  background-color: black;
+  background-color: #707070;
+  border-radius: 8px;
 }
 .back::after {
   content: " ";
@@ -236,7 +250,7 @@ iframe {
   height: 0;
   border-style: solid;
   border-width: 15px 26px 15px 0;
-  border-color: transparent #007bff transparent transparent;
+  border-color: transparent #707070 transparent transparent;
   position: absolute;
   right: 20%;
   top: 50%;
@@ -305,7 +319,8 @@ iframe {
   right: 20%;
   top: 50%;
   transform: translateY(-50%);
-  background-color: black;
+  background-color: #707070;
+  border-radius: 8px;
 }
 .next::after {
   content: "";
@@ -314,7 +329,7 @@ iframe {
   height: 0;
   border-style: solid;
   border-width: 15px 0 15px 26px;
-  border-color: transparent transparent transparent #007bff;
+  border-color: transparent transparent transparent #707070;
   position: absolute;
   left: 20%;
   top: 50%;
@@ -323,9 +338,10 @@ iframe {
 
 .controlList {
   margin: 20px 0;
+  padding: 20px 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   .musicStatus {
     width: 92px;
@@ -368,7 +384,7 @@ iframe {
       height: 25px;
       background: #fff;
       z-index: 4;
-      border: 2px solid black;
+      border: 3px solid black;
       transition: 0.2s; /* 點選放大時候的漸變時間 */
     }
     input[type="range"]::-webkit-slider-thumb:before,
