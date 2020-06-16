@@ -1,8 +1,8 @@
 <template>
   <div>
-    <HelloWorld/>
+    <PaymentStep/>
     <div class="paymetMethods">
-      <div class="payment store" v-for="(item,idx) in paymentList" :key="idx" :id="item.id"  @click="select(item.id)">
+      <div class="payment store" :class="selectPayment==item.id?'userSelectPayment':''" v-for="(item,idx) in paymentList" :key="idx" :id="item.id"  @click="select(item.id)">
         <div class="paymentSelect">
           <img :src="require(`../assets/icons/svg/${selectPayment==item.id?'icon_confirm.svg' : 'icon_confirm_normal.svg'}`)" alt="">
         </div>
@@ -36,12 +36,12 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import PaymentStep from '@/components/PaymentStep.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    PaymentStep
   },
   data () {
     return {
@@ -89,6 +89,19 @@ export default {
 }
 </script>
 <style lang="scss" scope>
+$main: #4BC9C9;
+$darkBlackText: #303133;
+$mediumBlackText: #606266;
+$lightBlackText: #909399;
+
+$darkGrayBorder: #909399;
+$lightGrayBorder: #e4e7ed;
+$orgBorder: #FA5555;
+
+$mediumBg:#f0f2f5;
+$lishtBg: #F5F7FA;
+
+$white: #fff;
 *{
   // outline: 1px solid black;
   box-sizing: border-box;
@@ -104,6 +117,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  .userSelectPayment{
+    border: 1px solid $main !important;
+    background-color: $lishtBg;
+  }
   .payment{
     cursor: pointer;
     border-radius: 4px;
@@ -116,6 +133,7 @@ export default {
     .paymentInfo{
       display: flex;
       margin-left: 24px;
+      align-items: center;
       img{
         display: block;
         width: 80px;
@@ -150,6 +168,7 @@ export default {
 .stepRouter{
   width: 860px;
   margin: 20px auto;
+  font-size: 20px;
   .steps{
     float: right;
   }
@@ -163,5 +182,11 @@ export default {
   .perStep{
     margin-right: 20px;
   }
+  .nextStep{
+    background-color: $main;
+    border: 1px solid $main;
+    color: $white;
+  }
 }
+
 </style>

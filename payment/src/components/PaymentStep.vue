@@ -51,6 +51,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+$main: #4BC9C9;
+$darkBlackText: #303133;
+$mediumBlackText: #606266;
+$lightBlackText: #909399;
+
+$darkGrayBorder: #909399;
+$lightGrayBorder: #e4e7ed;
+$orgBorder: #FA5555;
+
+$mediumBg:#f0f2f5;
+$lishtBg: #F5F7FA;
+
+$white: #fff;
 .paymentStep{
   width: 820px;
   margin: 0 auto;
@@ -88,13 +101,28 @@ export default {
     align-items: center;
   }
   .orderInfo{
+    border-left: 1px solid $white;
+    color: $white;
+    .orderTitle{
+      padding-left: 16px;
+      .chi{
+        font-size: 36px;
+      }
+    }
   }
   .orderAmount{
     display: flex;
     justify-content: space-around;
+    align-items: center;
     width: 60%;
+    color: $white;
     .amount{
       display: flex;
+    }
+    .totalAmount{
+      color: $white;
+      font-size: 24px;
+      font-weight: bold;
     }
   }
 }

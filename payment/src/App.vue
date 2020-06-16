@@ -3,7 +3,7 @@
     <div class="logo"><h1>PAYMENT</h1></div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/checkPayment">About</router-link>
     </div>
     <router-view/>
   </div>
