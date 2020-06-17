@@ -4,6 +4,7 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/checkPayment">About</router-link>
+      <router-link to="/success">About</router-link>
     </div>
     <router-view/>
   </div>
