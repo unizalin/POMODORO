@@ -2,9 +2,9 @@
   <div>
     <PaymentStep/>
     <div class="paymetMethods">
-      <div class="payment store" :class="selectPayment==item.id?'userSelectPayment':''" v-for="(item,idx) in paymentList" :key="idx" :id="item.id"  @click="select(item.id)">
+      <div class="payment store" :class="selectPayment.id==item.id?'userSelectPayment':''" v-for="(item,idx) in paymentList" :key="idx" :id="item.id"  @click="select({id:item.id,title:item.title})">
         <div class="paymentSelect">
-          <img :src="require(`../assets/icons/svg/${selectPayment==item.id?'icon_confirm.svg' : 'icon_confirm_normal.svg'}`)" alt="">
+          <img :src="require(`../assets/icons/svg/${selectPayment.id==item.id?'icon_confirm.svg' : 'icon_confirm_normal.svg'}`)" alt="">
         </div>
         <div class="paymentInfo">
           <div class="img"><img :src="require(`../assets/${item.img}`)" alt=""></div>
@@ -28,7 +28,7 @@
     <div class="stepRouter">
       <div class="steps">
         <div class="step perStep">上一步</div>
-        <div class="step nextStep">下一步</div>
+        <div class="step nextStep" @click="goCheckPay()">下一步</div>
       </div>
     </div>
   </div>
@@ -37,6 +37,7 @@
 <script>
 // @ is an alias to /src
 import PaymentStep from '@/components/PaymentStep.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Home',
@@ -45,35 +46,34 @@ export default {
   },
   data () {
     return {
-      selectPayment: 'store',
       paymentList: [
         {
           id: 'sotre',
-          title: '超商取貨 付款',
+          title: '超商取貨',
           content: '24隔日取貨說明',
           img: 'icons/svg/icon_store.svg'
         },
         {
           id: 'credit',
-          title: '信用卡 付款',
+          title: '信用卡',
           content: 'VISA, Master, JCB, 聯合信用卡',
           img: 'icons/svg/icon_card.svg'
         },
         {
           id: 'line',
-          title: 'LINE Pay 付款',
+          title: 'LINE Pay',
           content: '使用line point折抵消費',
           img: 'icons/svg/line_pay.svg'
         },
         {
           id: 'union',
-          title: '銀聯卡 付款',
+          title: '銀聯卡',
           content: '支付成功頁面僅為銀聯卡回覆訊息，交易是否完成請需以本商店通知為準',
           img: 'icons/unionpay.png'
         },
         {
           id: 'atm',
-          title: 'Web ATM 付款',
+          title: 'Web ATM',
           content: '網路銀行ATM操作說明',
           img: 'icons/svg/icon_atm.svg'
         }
@@ -81,10 +81,19 @@ export default {
     }
   },
   methods: {
-    select (id) {
-      this.selectPayment = id
-      console.log(id)
-    }
+    goCheckPay () {
+      console.log(this.selectPayment)
+      const vm = this
+      if (!vm.selectPayment) {
+        return
+      }
+      vm.$router.push({ path: '/checkPayment' })
+      console.log('goCheckPay')
+    },
+    ...mapActions(['select'])
+  },
+  computed: {
+    ...mapGetters(['selectPayment'])
   }
 }
 </script>

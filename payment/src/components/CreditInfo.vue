@@ -8,7 +8,7 @@
       </div>
       <div class="creditNum">
         <label for="creditNum" class="title">有效年月</label>
-        <input id="creditNum" type="text error" v-model.trim="creditNum.text" placeholder="MM/YY">
+        <input id="creditNum" type="text" class="error" v-model.trim="creditNum.text" placeholder="MM/YY">
         <div class="creditSample"><img src="../assets/icons/svg/qa_card_date.svg" alt=""></div>
       </div>
       <div class="creditValidate">
@@ -87,16 +87,6 @@ $white: #fff;
       color: #909399;
       padding-left: 15px;
     }
-    .error{
-      height: 40px;
-      border: 1px solid $orgBorder;
-      border-radius: 4px;
-      color: #909399;
-      padding-left: 15px;
-      background-image: url('../assets/icons/svg/icon_error.svg');
-      background-repeat: no-repeat;
-      background-position: right 4%  center;
-    }
     input[type=number]{
       height: 40px;
       border: 1px solid #DCDFE6;
@@ -124,12 +114,19 @@ $white: #fff;
       label{
         margin-right: 16px;
       }
+      .error{
+        height: 40px;
+        border: 1px solid $orgBorder;
+        border-radius: 4px;
+        color: #909399;
+        padding-left: 15px;
+        background-image: url('../assets/icons/svg/icon_error.svg');
+        background-repeat: no-repeat;
+        background-position: right 4%  center;
+      }
       #creditNum{
         width: 300px;
         margin-right: 12px;
-        background-image: url('../assets/icons/svg/icon_confirm_normal.svg');
-        background-repeat: no-repeat;
-        background-position: right 4% center;
       }
     }
     .creditValidate{

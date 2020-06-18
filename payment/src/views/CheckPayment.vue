@@ -4,31 +4,31 @@
     <div class="checkPaymetStore">
       <div class="paymentTitle">
         <img src="../assets/icons/svg/icon_store.svg" alt="">
-        <div class="text">超商付款 取貨</div>
+        <div class="text">{{selectPayment.title}} 取貨</div>
       </div>
       <div class="content">
-        <Credit/>
-        <Store/>
+        <Credit v-if="selectPayment.id=='credit'" />
+        <Store v-if="selectPayment.id=='store'"/>
         <div class="userInfo">
           <div class="userNav">填寫訂購人資訊</div>
           <div class="userContent">
             <div class="userName">
               <label for="userName" class="title">姓名</label>
-              <input id="userName" class="inputName" type="text" placeholder="請填寫真實姓名" v-model.trim="userName.text">
+              <input id="userName" class="inputName" :class="userContent.Name.validate?'':'error'" type="text" placeholder="請填寫真實姓名" v-model.trim="userContent.Name.text">
             </div>
             <div class="userPhone">
               <label for="userPhone" class="title">手機</label>
               <input id="userPhone"  type="text">
-              <input id="phoneNum" type="text" v-model.trim="userPhone.text">
+              <input id="phoneNum" type="text"  :class="userContent.Phone.validate?'':'error'"  v-model.trim="userContent.Phone.text">
             </div>
             <div class="userAdd">
               <label for="userAdd" class="title">地址</label>
               <input id="userAddNum" type="text" placeholder="郵遞區號">
-              <input id="userAdd" type="text" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="userAdd.text">
+              <input id="userAdd" type="text"  :class="userContent.Add.validate?'':'error'" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="userContent.Add.text">
             </div>
             <div class="userEmail">
               <label for="userEmail" class="title">Email</label>
-              <input id="userEmail" v-model.trim="userEmail.text" type="text">
+              <input id="userEmail"  :class="userContent.Email.validate?'':'error'" v-model.trim="userContent.Email.text" type="text">
             </div>
           </div>
         </div>
@@ -38,21 +38,21 @@
             <div class="checkSameUser" @click="isSameCheck"><img  :src="require(`../assets/icons/svg/${checkSameUser?'icon_confirm':'icon_oncheck'}.svg`)" alt=""> 同訂購人資料</div>
             <div class="recipName">
               <label for="recipName" class="title">姓名</label>
-              <input id="recipName" type="text" placeholder="請填寫真實姓名" v-model.trim="recipName.text">
+              <input id="recipName" type="text" :class="recipeContent.Name.validate?'':'error'" placeholder="請填寫真實姓名" v-model.trim="recipeContent.Name.text">
             </div>
             <div class="recipPhone">
               <label for="recipPhone" class="title">手機</label>
               <input id="recipPhone"  type="text">
-              <input id="recipPhoneNum" type="text" v-model.trim="recipPhone.text">
+              <input id="recipPhoneNum" type="text" :class="recipeContent.Phone.validate?'':'error'" v-model.trim="recipeContent.Phone.text">
             </div>
             <div class="recipAdd">
               <label for="recipAdd" class="title">地址</label>
               <input id="recipAddNum" type="text" placeholder="郵遞區號">
-              <input id="recipAdd" type="text" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="recipAdd.text">
+              <input id="recipAdd" type="text" :class="recipeContent.Add.validate?'':'error'" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="recipeContent.Add.text">
             </div>
             <div class="recipEmail">
               <label for="recipEmail" class="title">Email</label>
-              <input id="recipEmail" type="text" placeholder="寄送通知會發送至此email" v-model.trim="recipEmail.text">
+              <input id="recipEmail" type="text" :class="recipeContent.Email.validate?'':'error'" placeholder="寄送通知會發送至此email" v-model.trim="recipeContent.Email.text">
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@
         </div>
         <div class="stepRouter">
           <div class="steps">
-            <div class="step perStep">上一步</div>
+            <router-link :to="{path: '/'}" class="step perStep" >上一步</router-link>
             <div class="step nextStep" @click="goCheck">下一步</div>
           </div>
         </div>
@@ -83,6 +83,7 @@
 import PaymentStep from '@/components/PaymentStep.vue'
 import Credit from '@/components/CreditInfo.vue'
 import Store from '@/components/StoreInfo.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CheckPayment',
@@ -97,38 +98,50 @@ export default {
       checkSameUser: false,
       checkNotify: false,
       NotifyValidate: false,
-      userName: {
-        text: '',
-        valideate: false
+      userName: '',
+      userPhone: '',
+      userAdd: '',
+      userEmail: ' ',
+      userContent: {
+        Name: {
+          text: '',
+          validate: true
+        },
+        Phone: {
+          text: '',
+          validate: true
+        },
+        Add: {
+          text: '',
+          validate: true
+        },
+        Email: {
+          text: '',
+          validate: true
+        }
       },
-      userPhone: {
-        text: '',
-        valideate: false
+      recipeContent: {
+        Name: {
+          text: '',
+          validate: true
+        },
+        Phone: {
+          text: '',
+          validate: true
+        },
+        Add: {
+          text: '',
+          validate: true
+        },
+        Email: {
+          text: '',
+          validate: true
+        }
       },
-      userAdd: {
-        text: '',
-        valideate: false
-      },
-      userEmail: {
-        text: '',
-        valideate: false
-      },
-      recipName: {
-        text: '',
-        valideate: false
-      },
-      recipPhone: {
-        text: '',
-        valideate: false
-      },
-      recipAdd: {
-        text: '',
-        valideate: false
-      },
-      recipEmail: {
-        text: '',
-        valideate: false
-      }
+      recipName: '',
+      recipPhone: '',
+      recipAdd: '',
+      recipEmail: ''
     }
   },
   methods: {
@@ -136,24 +149,43 @@ export default {
       const vm = this
       vm.checkSameUser = !vm.checkSameUser
       if (vm.checkSameUser) {
-        vm.recipName.text = vm.userName.text
-        vm.recipPhone.text = vm.userPhone.text
-        vm.recipAdd.text = vm.userAdd.text
-        vm.recipEmail.text = vm.userEmail.text
+        vm.recipeContent.Name.text = vm.userContent.Name.text
+        vm.recipeContent.Phone.text = vm.userContent.Phone.text
+        vm.recipeContent.Add.text = vm.userContent.Add.text
+        vm.recipeContent.Email.text = vm.userContent.Email.text
       } else {
-        vm.recipName.text = ''
-        vm.recipPhone.text = ''
-        vm.recipAdd.text = ''
-        vm.recipEmail.text = ''
+        vm.recipeContent.Name.te = ''
+        vm.recipeContent.Phone.te = ''
+        vm.recipeContent.Add.te = ''
+        vm.recipeContent.Email.te = ''
       }
     },
     goCheck () {
-      alert('ff')
       const vm = this
       if (!vm.checkNotify) {
         vm.NotifyValidate = !vm.NotifyValidate
       }
+      // const test = Object.values(vm.userContent).map((item, idx) => console.log('item', idx, item.validate === false))
+      const userDataArr = Object.values(vm.userContent)
+      const recipeDataArr = Object.valuse(vm.recipeContent)
+      userDataArr.forEach(element => {
+        if (element.text.length >= 0) {
+          element.validate = true
+        }
+      })
+      recipeDataArr.forEach(element => {
+        if (element.text.length > 0) {
+          element.validate = true
+        }
+      })
+      if (userDataArr.every(item => item.validate === true) && recipeDataArr.every(item => item.validate === true)) {
+        console.log('資料 all done')
+        vm.$roter.push({ path: '/success' })
+      }
     }
+  },
+  computed: {
+    ...mapGetters(['selectPayment'])
   }
 }
 </script>

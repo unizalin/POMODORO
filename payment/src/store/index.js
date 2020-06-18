@@ -5,11 +5,26 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    selectPayment: {
+      id: '',
+      item: ''
+    }
   },
   mutations: {
+    SELECTPAYMENT (state, payload) {
+      state.selectPayment = payload
+    }
   },
   actions: {
+    select (context, payload) {
+      context.commit('SELECTPAYMENT', payload)
+    }
   },
   modules: {
+  },
+  getters: {
+    selectPayment (state) {
+      return state.selectPayment
+    }
   }
 })
