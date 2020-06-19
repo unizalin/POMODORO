@@ -4,7 +4,8 @@
     <div class="checkPaymetStore">
       <div class="paymentTitle">
         <div class="text">訂購成功！</div>
-        <div class="content">感謝您的訂購，請您在2019/08/10,am00:00前繳費 至超商店內機台輸入代碼進行繳費，逾期訂單自動作廢。</div>
+        <div v-if="selectPayment.id=='store'" class="content">感謝您的訂購，請您在2019/08/10,am00:00前繳費 至超商店內機台輸入代碼進行繳費，逾期訂單自動作廢。</div>
+        <div v-else class="content">感謝您的訂購，我們將儘速為您出貨！</div>
         <div class="gif"><img src="../assets/icons/svg/img_complete.svg" alt=""></div>
       </div>
       <div class="content">
@@ -60,11 +61,29 @@
           </div>
           <div class="payInfo">
             <div class="payTitle">付款資訊</div>
-            <div class="content">
+            <div class="content" v-if="selectPayment.id=='store'">
               <div class="amount">需付金額：940元</div>
               <div class="paycode">繳費代碼：Rh7847213183</div>
               <div class="payDate">繳費期限：2019/08/10,am00:00</div>
               <div class="payStatus">狀態：待付款</div>
+            </div>
+            <div class="content" v-else-if="selectPayment.id=='credit'">
+              <div class="amount">信用卡刷卡：940元</div>
+              <div class="paycode">手續費：0元</div>
+              <!-- <div class="payDate">繳費期限：2019/08/10,am00:00</div> -->
+              <div class="payStatus">狀態：待付款</div>
+            </div>
+            <div class="content" v-else-if="selectPayment.id=='atm'">
+              <div class="amount">Web ATM付款：940元</div>
+              <div class="paycode">付款銀行：玉山銀行</div>
+              <div class="payDate">手續費：15元</div>
+              <div class="payStatus">狀態：已完成付款</div>
+            </div>
+            <div class="content" v-else-if="selectPayment.id=='line'">
+              <div class="amount">LINE Pay付款：940元</div>
+              <div class="paycode">LINE Point折抵：65元</div>
+              <div class="payDate">手續費：0元</div>
+              <div class="payStatus">狀態：已完成付款</div>
             </div>
           </div>
         </div>
@@ -81,6 +100,7 @@
 
 <script>
 import PaymentStep from '@/components/PaymentStep.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CheckPayment',
@@ -150,6 +170,9 @@ export default {
         vm.NotifyValidate = !vm.NotifyValidate
       }
     }
+  },
+  computed: {
+    ...mapGetters(['selectPayment'])
   }
 }
 </script>

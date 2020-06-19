@@ -87,6 +87,16 @@ $white: #fff;
       color: #909399;
       padding-left: 15px;
     }
+    input[type=text].error{
+        height: 40px;
+        border: 1px solid $orgBorder;
+        border-radius: 4px;
+        color: #909399;
+        padding-left: 15px;
+        background-image: url('../assets/icons/svg/icon_error.svg');
+        background-repeat: no-repeat;
+        background-position: right 4%  center;
+    }
     input[type=number]{
       height: 40px;
       border: 1px solid #DCDFE6;
@@ -113,16 +123,6 @@ $white: #fff;
       text-align: left;
       label{
         margin-right: 16px;
-      }
-      .error{
-        height: 40px;
-        border: 1px solid $orgBorder;
-        border-radius: 4px;
-        color: #909399;
-        padding-left: 15px;
-        background-image: url('../assets/icons/svg/icon_error.svg');
-        background-repeat: no-repeat;
-        background-position: right 4%  center;
       }
       #creditNum{
         width: 300px;

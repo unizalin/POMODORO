@@ -9,6 +9,7 @@
       <div class="content">
         <Credit v-if="selectPayment.id=='credit'" />
         <Store v-if="selectPayment.id=='store'"/>
+        <WebAtm/>
         <div class="userInfo">
           <div class="userNav">填寫訂購人資訊</div>
           <div class="userContent">
@@ -20,11 +21,15 @@
               <label for="userPhone" class="title">手機</label>
               <input id="userPhone"  type="text">
               <input id="phoneNum" type="text"  :class="userContent.Phone.validate?'':'error'"  v-model.trim="userContent.Phone.text">
+              <div v-if="!userContent.Phone.validate" class="errMsg">格式錯誤</div>
             </div>
             <div class="userAdd">
               <label for="userAdd" class="title">地址</label>
               <input id="userAddNum" type="text" placeholder="郵遞區號">
-              <input id="userAdd" type="text"  :class="userContent.Add.validate?'':'error'" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="userContent.Add.text">
+              <div class="addBlock">
+                <input id="userAdd" type="text"  :class="userContent.Add.validate?'':'error'" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="userContent.Add.text">
+                <div v-if="!userContent.Add.validate" class="errMsg">本欄位為必填</div>
+              </div>
             </div>
             <div class="userEmail">
               <label for="userEmail" class="title">Email</label>
@@ -44,11 +49,16 @@
               <label for="recipPhone" class="title">手機</label>
               <input id="recipPhone"  type="text">
               <input id="recipPhoneNum" type="text" :class="recipeContent.Phone.validate?'':'error'" v-model.trim="recipeContent.Phone.text">
+              <div v-if="!recipeContent.Phone.validate" class="errMsg">格式錯誤</div>
             </div>
             <div class="recipAdd">
               <label for="recipAdd" class="title">地址</label>
               <input id="recipAddNum" type="text" placeholder="郵遞區號">
-              <input id="recipAdd" type="text" :class="recipeContent.Add.validate?'':'error'" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="recipeContent.Add.text">
+              <div class="addBlock">
+                <input id="recipAdd" type="text" :class="recipeContent.Add.validate?'':'error'" placeholder="例：新北市信義區復興路999段99號1巷8樓" v-model.trim="recipeContent.Add.text">
+                <div v-if="!recipeContent.Add.validate" class="errMsg">本欄位為必填</div>
+              </div>
+
             </div>
             <div class="recipEmail">
               <label for="recipEmail" class="title">Email</label>
@@ -63,7 +73,7 @@
             <li>・若您對取貨或付款的方式有疑問，請詳閱「購買說明」。</li>
             <li>・請確認您已詳閱並瞭解本站「購買說明」內容，訂單完成即表示您已同意其中的各項說明。</li>
           </ul>
-          <div v-if="!NotifyValidate" class="noticeCheck" @click="checkNotify=!checkNotify">
+          <div v-if="!NotifyValidate"  class="noticeCheck" @click="checkNotify=!checkNotify">
             <img :src="require(`../assets/icons/svg/${checkNotify?'icon_confirm':'icon_oncheck'}.svg`)" alt="">確認，我已暸解</div>
           <div v-else class="noticeCheck" @click="checkNotify=!checkNotify">
             <img :src="require(`../assets/icons/svg/${checkNotify?'icon_confirm':'icon_error'}.svg`)" alt="">確認，我已暸解<span class="dobuleCheck" v-if="!checkNotify">請確認</span></div>
@@ -83,6 +93,7 @@
 import PaymentStep from '@/components/PaymentStep.vue'
 import Credit from '@/components/CreditInfo.vue'
 import Store from '@/components/StoreInfo.vue'
+import WebAtm from '@/components/WebAtm.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -90,7 +101,8 @@ export default {
   components: {
     PaymentStep,
     Credit,
-    Store
+    Store,
+    WebAtm
   },
   data () {
     return {
@@ -98,7 +110,6 @@ export default {
       checkSameUser: false,
       checkNotify: false,
       NotifyValidate: false,
-      userName: '',
       userPhone: '',
       userAdd: '',
       userEmail: ' ',
@@ -137,11 +148,7 @@ export default {
           text: '',
           validate: true
         }
-      },
-      recipName: '',
-      recipPhone: '',
-      recipAdd: '',
-      recipEmail: ''
+      }
     }
   },
   methods: {
@@ -162,30 +169,118 @@ export default {
     },
     goCheck () {
       const vm = this
-      if (!vm.checkNotify) {
-        vm.NotifyValidate = !vm.NotifyValidate
+      if (vm.checkNotify === false) {
+        vm.NotifyValidate = true
       }
-      // const test = Object.values(vm.userContent).map((item, idx) => console.log('item', idx, item.validate === false))
+      // const test = Object.values(vm.userContent).map((item, idx) => console.log('item', idx, item.validate === false))ㄕ
       const userDataArr = Object.values(vm.userContent)
-      const recipeDataArr = Object.valuse(vm.recipeContent)
+      const recipeDataArr = Object.values(vm.recipeContent)
+      console.log('userDataArr', userDataArr)
       userDataArr.forEach(element => {
-        if (element.text.length >= 0) {
+        if (element.text.length > 0) {
           element.validate = true
+        } else {
+          element.validate = false
         }
       })
       recipeDataArr.forEach(element => {
         if (element.text.length > 0) {
           element.validate = true
+        } else {
+          element.validate = false
         }
       })
       if (userDataArr.every(item => item.validate === true) && recipeDataArr.every(item => item.validate === true)) {
         console.log('資料 all done')
-        vm.$roter.push({ path: '/success' })
+        vm.$router.push({ path: '/success' })
       }
     }
   },
   computed: {
     ...mapGetters(['selectPayment'])
+  },
+  watch: {
+    'userContent.Name.text' () {
+      const vm = this
+      if (vm.userContent.Name.text.length > 0) {
+        vm.userContent.Name.validate = true
+      }
+    },
+    'userContent.Phone.text' () {
+      const vm = this
+      if (vm.userContent.Phone.text.length > 0) {
+        vm.userContent.Phone.validate = true
+      }
+      var phoneRule = /^09\d{8}$/
+      if (vm.userContent.Phone.text.search(phoneRule) < 0) {
+        vm.userContent.Phone.validate = false
+      } else {
+        vm.userContent.Phone.validate = true
+      }
+    },
+    'userContent.Add.text' () {
+      const vm = this
+      if (vm.userContent.Add.text.length > 0) {
+        vm.userContent.Add.validate = true
+      }
+    },
+    'userContent.Email.text' () {
+      const vm = this
+      if (vm.userContent.Email.text.length > 0) {
+        vm.userContent.Email.validate = true
+      }
+      // eslint-disable-next-line no-useless-escape
+      var emailRule = /^\w+((-\w+)|(\.\w+)|(\+\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
+      if (vm.userContent.Email.text.search(emailRule) < 0) {
+        vm.userContent.Email.validate = false
+      } else {
+        vm.userContent.Email.validate = true
+      }
+    },
+    'recipeContent.Name.text' () {
+      const vm = this
+      if (vm.recipeContent.Name.text.length > 0) {
+        vm.recipeContent.Name.validate = true
+      }
+    },
+    'recipeContent.Phone.text' () {
+      const vm = this
+      if (vm.recipeContent.Phone.text.length > 0) {
+        vm.recipeContent.Phone.validate = true
+      }
+      var phoneRule = /^09\d{8}$/
+      if (vm.recipeContent.Phone.text.search(phoneRule) < 0) {
+        vm.recipeContent.Phone.validate = false
+      } else {
+        vm.recipeContent.Phone.validate = true
+      }
+    },
+    'recipeContent.Add.text' () {
+      const vm = this
+      if (vm.recipeContent.Add.text.length > 0) {
+        vm.recipeContent.Add.validate = true
+      }
+    },
+    'recipeContent.Email.text' () {
+      const vm = this
+      if (vm.recipeContent.Email.text.length > 0) {
+        vm.recipeContent.Email.validate = true
+      }
+    },
+    'isSameCheck' () {
+      const vm = this
+      if (vm.checkSameUser) {
+        vm.recipeContent.Name.text = vm.userContent.Name.text
+        vm.recipeContent.Phone.text = vm.userContent.Phone.text
+        vm.recipeContent.Add.text = vm.userContent.Add.text
+        vm.recipeContent.Email.text = vm.userContent.Email.text
+      } else {
+        vm.recipeContent.Name.te = ''
+        vm.recipeContent.Phone.te = ''
+        vm.recipeContent.Add.te = ''
+        vm.recipeContent.Email.te = ''
+      }
+    }
   }
 }
 </script>
@@ -219,7 +314,10 @@ $white: #fff;
     margin-right: 12px;
   }
 }
-
+.errMsg{
+  color: $orgBorder;
+  font-size: 14px;
+}
 .userInfo{
   margin-top: 48px;
   .userNav{
@@ -236,6 +334,17 @@ $white: #fff;
       color: #909399;
       padding-left: 15px;
     }
+    input[type=text].error{
+        height: 40px;
+        border: 1px solid $orgBorder;
+        border-radius: 4px;
+        color: #909399;
+        padding-left: 15px;
+        background-image: url('../assets/icons/svg/icon_error.svg');
+        background-repeat: no-repeat;
+        background-position: right 4%  center;
+    }
+    input:focus {outline: none; }
     .userName{
       text-align: left;
       float: left;
@@ -262,6 +371,8 @@ $white: #fff;
       }
     }
     .userAdd{
+      display: flex;
+      align-self: start;
       width: 100%;
       text-align: left ;
       margin-bottom: 20px;
@@ -274,6 +385,12 @@ $white: #fff;
       }
       #userAdd{
         width: 600px;
+      }
+      .addBlock{
+        position: relative;
+        .errMsg{
+          position: absolute;
+        }
       }
     }
     .userEmail{
@@ -313,6 +430,17 @@ $white: #fff;
       color: #909399;
       padding-left: 15px;
     }
+    input[type=text].error{
+      height: 40px;
+      border: 1px solid $orgBorder;
+      border-radius: 4px;
+      color: #909399;
+      padding-left: 15px;
+      background-image: url('../assets/icons/svg/icon_error.svg');
+      background-repeat: no-repeat;
+      background-position: right 4%  center;
+    }
+    input:focus {outline: none; }
     .recipName{
       text-align: left;
       float: left;
@@ -341,6 +469,8 @@ $white: #fff;
     .recipAdd{
       width: 100%;
       text-align: left ;
+      display: flex;
+      align-items: center;
       margin-bottom: 20px;
       label{
         margin-right: 40px;
@@ -351,6 +481,12 @@ $white: #fff;
       }
       #recipAdd{
         width: 600px;
+      }
+      .addBlock{
+        position: relative;
+        .errMsg{
+          position: absolute;
+        }
       }
     }
     .recipEmail{
