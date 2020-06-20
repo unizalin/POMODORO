@@ -2,21 +2,27 @@
   <div class="hello">
     <div class="paymentStep">
       <div class="step order">
-        <div class="svg"><img src="../assets/icons/svg/icon_confirm.svg" alt=""></div>
-        <div class="orderTitle">確認購物車</div>
+        <div class="orderTitle"><img src="../assets/icons/svg/icon_confirm.svg" alt=""><span class="text">確認購物車</span></div>
         <div class="stepSvg"><img src="../assets/icons/svg/icon_arrow.svg" alt=""></div>
       </div>
-      <div class="step check">
-        <div class="svg"><img src="../assets/icons/svg/icon_step2.svg" alt=""></div>
-        <div class="orderTitle">選擇配送付款方式</div>
-        <div class="stepSvg"><img src="../assets/icons/svg/icon_arrow.svg" alt=""></div>
+      <div class="step check" :class="this.$route.path=='/success'?'active':''">
+        <div class="orderTitle">
+          <img v-if="this.$route.path=='/success'" src="../assets/icons/svg/icon_confirm.svg" alt="">
+          <img v-else src="../assets/icons/svg/icon_step2.svg" alt="">
+          <span :class="this.$route.path!='/success'?'show':''">選擇配送付款方式</span></div>
+        <div class="stepSvg">
+          <img  src="../assets/icons/svg/icon_arrow.svg" alt="">
+        </div>
       </div>
-      <div class="step success">
-        <div class="svg"><img src="../assets/icons/svg/icon_step3.svg" alt=""></div>
-        <div class="orderTitle">確認訂購</div>
+      <div class="step success" :class="this.$route.path=='/success'?'active':''">
+        <div class="orderTitle">
+          <img v-if="this.$route.path=='/success'" src="../assets/icons/svg/icon_confirm.svg" alt="">
+          <img v-else src="../assets/icons/svg/icon_step3.svg" alt="">
+          <span :class="this.$route.path=='/success'?'show':''">確認訂購</span>
+        </div>
       </div>
     </div>
-    <div class="orderStatement">
+    <div v-if="this.$route.path!='/success'" class="orderStatement">
       <div class="state">
         <div class="orderInfo">
           <div class="orderTitle">
@@ -65,7 +71,7 @@ $lishtBg: #F5F7FA;
 
 $white: #fff;
 .paymentStep{
-  width: 820px;
+  max-width: 820px;
   margin: 0 auto;
   background-color: #F5F7FA;
   display: flex;
@@ -75,26 +81,58 @@ $white: #fff;
   .step{
     display: flex;
     justify-content: center;
-    text-align: center;
     align-items: center;
     width: 33%;
     padding: 12px 24px;
-    .svg{
-      margin-right: 12px;
+    .orderTitle{
+      display: flex;
+      align-items: center;
+      img{
+        margin-right: 16px;
+      }
     }
     .stepSvg{
-      justify-items: end;
+      margin-left: 16px;;
+    }
+  }
+  @media(max-width:540px){
+    .step{
+      width: inherit;
+    }
+  }
+  .order{
+    color: $main;
+  }
+  .success{
+    color: $lightBlackText;
+  }
+  .active{
+    color: $main;
+  }
+  @media(max-width:540px){
+    .order,.check,.success{
+      span{
+        display: none;
+      }
+      span.show{
+        display: block;
+      }
     }
   }
 }
+@media(max-width:720px){
+  .paymentStep{
+    justify-content:space-around
+  }
+}
+
 .orderStatement{
-  // display: flex;w
   width: 100%;
   height: 130px;
   background: transparent linear-gradient(270deg, #82D6D6 0%, #8BC1EF 100%) 0% 0% no-repeat padding-box;
   .state{
     height: 100%;
-    width: 860px;
+    max-width: 860px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -123,6 +161,22 @@ $white: #fff;
       color: $white;
       font-size: 24px;
       font-weight: bold;
+    }
+  }
+  @media(max-width: 720px){
+    .orderAmount{
+      flex-direction: column;
+      align-items: start;
+      width: 50%;
+      color: $white;
+      .amount{
+        display: flex;
+      }
+      .totalAmount{
+        color: $white;
+        font-size: 24px;
+        font-weight: bold;
+      }
     }
   }
 }

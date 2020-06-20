@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="container">
     <PaymentStep/>
     <div class="paymetMethods">
-      <div class="payment store" :class="selectPayment.id==item.id?'userSelectPayment':''" v-for="(item,idx) in paymentList" :key="idx" :id="item.id"  @click="select({id:item.id,title:item.title})">
+      <div class="payment store" :class="selectPayment.id==item.id?'userSelectPayment':''" v-for="(item,idx) in paymentList" :key="idx" :id="item.id"  @click="select({id:item.id,title:item.title,img:item.img})">
         <div class="paymentSelect">
           <img :src="require(`../assets/icons/svg/${selectPayment.id==item.id?'icon_confirm.svg' : 'icon_confirm_normal.svg'}`)" alt="">
         </div>
@@ -48,7 +48,7 @@ export default {
     return {
       paymentList: [
         {
-          id: 'sotre',
+          id: 'store',
           title: '超商取貨',
           content: '24隔日取貨說明',
           img: 'icons/svg/icon_store.svg'
@@ -82,13 +82,12 @@ export default {
   },
   methods: {
     goCheckPay () {
-      console.log(this.selectPayment)
       const vm = this
-      if (!vm.selectPayment) {
-        return
+      if (vm.selectPayment.id.length > 0) {
+        vm.$router.push({ path: '/checkPayment' })
+      } else {
+        alert('ss')
       }
-      vm.$router.push({ path: '/checkPayment' })
-      console.log('goCheckPay')
     },
     ...mapActions(['select'])
   },
@@ -120,7 +119,7 @@ $white: #fff;
 }
 
 .paymetMethods{
-  width: 860px;
+  max-width: 860px;
   margin: 0 auto;
   margin-top: 50px;
   display: flex;
@@ -160,7 +159,7 @@ $white: #fff;
 }
 .paymentNotice{
   margin-top:20px;
-  width: 860px;
+  max-width: 860px;
   margin: 0 auto;
   background-size: contain;
   background-image: url('../assets/icons/svg/icon_notice.svg');
@@ -175,7 +174,7 @@ $white: #fff;
   }
 }
 .stepRouter{
-  width: 860px;
+  max-width: 860px;
   margin: 20px auto;
   font-size: 20px;
   .steps{

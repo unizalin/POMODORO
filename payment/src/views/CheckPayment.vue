@@ -3,13 +3,13 @@
     <PaymentStep/>
     <div class="checkPaymetStore">
       <div class="paymentTitle">
-        <img src="../assets/icons/svg/icon_store.svg" alt="">
+        <img :class="selectPayment.id" :src="require(`../assets/${selectPayment.img}`)" alt="">
         <div class="text">{{selectPayment.title}} 取貨</div>
       </div>
       <div class="content">
         <Credit v-if="selectPayment.id=='credit'" />
         <Store v-if="selectPayment.id=='store'"/>
-        <WebAtm/>
+        <WebAtm v-if="selectPayment.id=='atm'"/>
         <div class="userInfo">
           <div class="userNav">填寫訂購人資訊</div>
           <div class="userContent">
@@ -110,9 +110,6 @@ export default {
       checkSameUser: false,
       checkNotify: false,
       NotifyValidate: false,
-      userPhone: '',
-      userAdd: '',
-      userEmail: ' ',
       userContent: {
         Name: {
           text: '',
@@ -175,7 +172,6 @@ export default {
       // const test = Object.values(vm.userContent).map((item, idx) => console.log('item', idx, item.validate === false))ㄕ
       const userDataArr = Object.values(vm.userContent)
       const recipeDataArr = Object.values(vm.recipeContent)
-      console.log('userDataArr', userDataArr)
       userDataArr.forEach(element => {
         if (element.text.length > 0) {
           element.validate = true
@@ -190,7 +186,7 @@ export default {
           element.validate = false
         }
       })
-      if (userDataArr.every(item => item.validate === true) && recipeDataArr.every(item => item.validate === true)) {
+      if (userDataArr.every(item => item.validate === true) && recipeDataArr.every(item => item.validate === true) && vm.checkNotify === true) {
         console.log('資料 all done')
         vm.$router.push({ path: '/success' })
       }
@@ -299,7 +295,7 @@ $lishtBg: #F5F7FA;
 
 $white: #fff;
 .checkPaymetStore {
-  width: 820px;
+  max-width: 820px;
   margin: 0 auto;
 }
 .paymentTitle{
@@ -310,8 +306,11 @@ $white: #fff;
   img{
     display: block;
     width: 36px;
-    height: 36px;
+    height: auto;
     margin-right: 12px;
+  }
+  .line {
+    width: 64px;
   }
 }
 .errMsg{
@@ -370,6 +369,38 @@ $white: #fff;
         width: 230px;
       }
     }
+    @media(max-width:820px){
+      .userName{
+        width: 100%;
+        #userName{
+          width: 600px;
+        }
+      }
+      .userPhone{
+        float: left;
+        width: 100%;
+        text-align: left;
+        label{
+          margin-right: 40px;
+        }
+        #phoneNum{
+          width: 512px;
+        }
+      }
+    }
+    @media(max-width:720px){
+      .userName{
+        width: 100%;
+        #userName{
+          width: 400px;
+        }
+      }
+      .userPhone{
+        #phoneNum{
+          width: 312px;
+        }
+      }
+    }
     .userAdd{
       display: flex;
       align-self: start;
@@ -393,6 +424,20 @@ $white: #fff;
         }
       }
     }
+    @media(max-width:820px){
+      .userAdd{
+      #userAdd{
+          width: 496px;
+        }
+      }
+    }
+    @media(max-width:720px){
+      .userAdd{
+      #userAdd{
+          width: 296px;
+        }
+      }
+    }
     .userEmail{
       width: 100%;
       text-align: left;
@@ -401,6 +446,20 @@ $white: #fff;
       }
       #userEmail{
         width: 704px;
+      }
+    }
+    @media(max-width:820px){
+      .userEmail{
+        #userEmail{
+          width: 600px;
+        }
+      }
+    }
+    @media(max-width:720px){
+      .userEmail{
+        #userEmail{
+          width: 400px;
+        }
       }
     }
   }
@@ -466,6 +525,38 @@ $white: #fff;
         width: 230px;
       }
     }
+    @media(max-width:820px){
+      .recipName{
+        width: 100%;
+        #recipName{
+          width: 600px;
+        }
+      }
+      .recipPhone{
+        float: left;
+        width: 100%;
+        text-align: left;
+        label{
+          margin-right: 40px;
+        }
+        #recipPhoneNum{
+          width: 512px;
+        }
+      }
+    }
+    @media(max-width:720px){
+      .recipName{
+        width: 100%;
+        #recipName{
+          width: 400px;
+        }
+      }
+      .recipPhone{
+        #recipPhoneNum{
+          width: 312px;
+        }
+      }
+    }
     .recipAdd{
       width: 100%;
       text-align: left ;
@@ -489,6 +580,20 @@ $white: #fff;
         }
       }
     }
+    @media(max-width:820px){
+      .recipAdd{
+        #recipAdd{
+          width: 496px;
+        }
+      }
+    }
+    @media(max-width:720px){
+      .recipAdd{
+        #recipAdd{
+          width: 296px;
+        }
+      }
+    }
     .recipEmail{
       width: 100%;
       text-align: left;
@@ -499,11 +604,25 @@ $white: #fff;
         width: 704px;
       }
     }
+    @media(max-width:820px){
+      .recipEmail{
+        #recipEmail{
+          width: 600px;
+        }
+      }
+    }
+    @media(max-width:720px){
+      .recipEmail{
+        #recipEmail{
+          width: 400px;
+        }
+      }
+    }
   }
 }
 .noticeInfo{
   margin-top:20px;
-  width: 860px;
+  max-width: 860px;
   margin: 0 auto;
   background-size: contain;
   background-image: url('../assets/icons/svg/icon_notice.svg');
@@ -530,7 +649,7 @@ $white: #fff;
   }
 }
 .stepRouter{
-  width: 860px;
+  max-width: 860px;
   margin: 20px auto;
   .steps{
     float: right;

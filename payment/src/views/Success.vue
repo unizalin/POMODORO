@@ -49,7 +49,7 @@
             </tr>
           </table>
           <div class="storeInfo">
-            <div class="store storeTitle">取得資訊 <img src="../assets/icons/logo_family.png" alt=""></div>
+            <div class="store storeTitle">取貨資訊</div>
             <div class="store storeName">
               <div class="title">取貨店名</div>
               <div class="name">復興</div>
@@ -61,7 +61,7 @@
           </div>
           <div class="payInfo">
             <div class="payTitle">付款資訊</div>
-            <div class="content" v-if="selectPayment.id=='store'">
+            <div class="content" v-if="selectPayment.id==='store'">
               <div class="amount">需付金額：940元</div>
               <div class="paycode">繳費代碼：Rh7847213183</div>
               <div class="payDate">繳費期限：2019/08/10,am00:00</div>
@@ -75,7 +75,7 @@
             </div>
             <div class="content" v-else-if="selectPayment.id=='atm'">
               <div class="amount">Web ATM付款：940元</div>
-              <div class="paycode">付款銀行：玉山銀行</div>
+              <div class="paycode">付款銀行：{{webAtm.name}}</div>
               <div class="payDate">手續費：15元</div>
               <div class="payStatus">狀態：已完成付款</div>
             </div>
@@ -90,7 +90,7 @@
         <div class="stepRouter">
           <div class="steps">
             <div class="step perStep">會員專區</div>
-            <div class="step nextStep" @click="goCheck">返回首頁</div>
+            <div class="step nextStep" @click="goBack">返回首頁</div>
           </div>
         </div>
       </div>
@@ -109,70 +109,15 @@ export default {
   },
   data () {
     return {
-      userNotice: '',
-      checkSameUser: false,
-      checkNotify: false,
-      NotifyValidate: false,
-      userName: {
-        text: '',
-        valideate: false
-      },
-      userPhone: {
-        text: '',
-        valideate: false
-      },
-      userAdd: {
-        text: '',
-        valideate: false
-      },
-      userEmail: {
-        text: '',
-        valideate: false
-      },
-      recipName: {
-        text: '',
-        valideate: false
-      },
-      recipPhone: {
-        text: '',
-        valideate: false
-      },
-      recipAdd: {
-        text: '',
-        valideate: false
-      },
-      recipEmail: {
-        text: '',
-        valideate: false
-      }
     }
   },
   methods: {
-    isSameCheck () {
-      const vm = this
-      vm.checkSameUser = !vm.checkSameUser
-      if (vm.checkSameUser) {
-        vm.recipName.text = vm.userName.text
-        vm.recipPhone.text = vm.userPhone.text
-        vm.recipAdd.text = vm.userAdd.text
-        vm.recipEmail.text = vm.userEmail.text
-      } else {
-        vm.recipName.text = ''
-        vm.recipPhone.text = ''
-        vm.recipAdd.text = ''
-        vm.recipEmail.text = ''
-      }
-    },
-    goCheck () {
-      alert('ff')
-      const vm = this
-      if (!vm.checkNotify) {
-        vm.NotifyValidate = !vm.NotifyValidate
-      }
+    goBack () {
+      this.$router.push({ path: '/' })
     }
   },
   computed: {
-    ...mapGetters(['selectPayment'])
+    ...mapGetters(['selectPayment', 'webAtm'])
   }
 }
 </script>
@@ -191,7 +136,7 @@ $lightBg: #F5F7FA;
 
 $white: #fff;
 .checkPaymetStore {
-  width: 820px;
+  max-width: 820px;
   margin: 0 auto;
 }
 .paymentTitle{
@@ -247,7 +192,7 @@ $white: #fff;
   }
 }
 .stepRouter{
-  width: 860px;
+  max-width: 860px;
   margin: 20px auto;
   display: flex;
   justify-content: center;

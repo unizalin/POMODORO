@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="paymentStep">
       <div class="step order">
         <div class="svg"><img src="../assets/icons/svg/icon_confirm.svg" alt=""></div>
@@ -42,3 +42,9 @@
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+@media (max-width:850px) {
+  
+}
+</style>

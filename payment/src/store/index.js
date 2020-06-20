@@ -7,7 +7,12 @@ export default new Vuex.Store({
   state: {
     selectPayment: {
       id: '',
-      item: ''
+      item: '',
+      img: ''
+    },
+    webAtm: {
+      id: '004',
+      name: '臺灣銀行'
     }
   },
   mutations: {
@@ -25,6 +30,9 @@ export default new Vuex.Store({
   getters: {
     selectPayment (state) {
       return state.selectPayment
+    },
+    webAtm (state) {
+      return state.webAtm
     }
   }
 })

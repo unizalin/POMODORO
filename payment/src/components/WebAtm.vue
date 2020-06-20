@@ -4,8 +4,8 @@
     <div class="webAtmContent">
       <div class="webAtmName">
         <label for="webAtmName" class="title">付款銀行</label>
-        <select name="" id="webAtmName" :value="webAtmName.value">
-          <option value="1"></option>
+        <select name="" id="webAtmName" v-model="webAtm">
+          <option v-for="(item,idx) in webAtmList" :value="item" :key="idx">{{item.name}}</option>
         </select>
       </div>
       <div class="webNotice">
@@ -20,26 +20,56 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      webAtmName: {
-        id: 1,
-        text: ''
-      },
-      webAtmNum: {
-        text: '',
-        valideate: false
-      },
-      webAtmValidate: {
-        text: '',
-        valideate: false
-      },
-      webAtmPhone: {
-        text: '',
-        valideate: false
-      }
+      webAtmList: [
+        {
+          id: '004',
+          name: '臺灣銀行'
+        },
+        {
+          id: '005',
+          name: '臺灣土地銀行'
+        },
+        {
+          id: '006',
+          name: '合作金庫商業銀行'
+        },
+        {
+          id: '007',
+          name: '第一商業銀行'
+        },
+        {
+          id: '008',
+          name: '華南商業銀行'
+        },
+        {
+          id: '009',
+          name: '彰化商業銀行'
+        },
+        {
+          id: '011',
+          name: '上海商業儲蓄銀行'
+        },
+        {
+          id: '012',
+          name: '台北富邦商業銀行'
+        },
+        {
+          id: '013',
+          name: '國泰世華商業銀行'
+        },
+        {
+          id: '015',
+          name: '中國輸出入銀行'
+        }
+      ]
     }
+  },
+  computed: {
+    ...mapGetters(['webAtm'])
   }
 }
 </script>
@@ -82,22 +112,17 @@ $white: #fff;
       color: #909399;
       padding-left: 15px;
     }
-    input[type=text].error{
-        height: 40px;
-        border: 1px solid $orgBorder;
-        border-radius: 4px;
-        color: #909399;
-        padding-left: 15px;
-        background-image: url('../assets/icons/svg/icon_error.svg');
-        background-repeat: no-repeat;
-        background-position: right 4%  center;
-    }
-    input[type=number]{
+    select{
+      cursor: pointer;
       height: 40px;
       border: 1px solid #DCDFE6;
       border-radius: 4px;
       color: #909399;
       padding-left: 15px;
+    }
+    select:focus{ outline: none;}
+    option{
+      height: 40px;
     }
     .webAtmName{
       float: left;

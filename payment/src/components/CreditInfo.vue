@@ -4,21 +4,21 @@
     <div class="creditContent">
       <div class="creditName">
         <label for="creditName" class="title">信用卡號</label>
-        <input id="creditName" class="inputName" type="text" placeholder="0000 0000 0000 000" v-model.trim="creditName.text">
+        <input id="creditName" class="inputName" type="text" :class="creditContent.Number.validate?'':'error'" placeholder="0000 0000 0000 000" v-model.trim="creditContent.Number.text">
       </div>
       <div class="creditNum">
         <label for="creditNum" class="title">有效年月</label>
-        <input id="creditNum" type="text" class="error" v-model.trim="creditNum.text" placeholder="MM/YY">
-        <div class="creditSample"><img src="../assets/icons/svg/qa_card_date.svg" alt=""></div>
+        <input id="creditNum" type="text" :class="creditContent.Date.validate?'':'error'" v-model.trim="creditContent.Date.text" placeholder="MM/YY">
+        <div class="creditSample"><div class="info">請翻至卡片背後，為日期標示之數字</div><img src="../assets/icons/svg/qa_card_date.svg" alt=""></div>
       </div>
       <div class="creditValidate">
         <label for="creditValidate" class="title">驗證碼</label>
-        <input id="creditValidate" type="text" placeholder="CVV" v-model.trim="creditValidate.text">
-        <div class="creditSample"><img src="../assets/icons/svg/qa_card.svg" alt=""></div>
+        <input id="creditValidate" type="text" placeholder="CVV" :class="creditContent.Val.validate?'':'error'" v-model.trim="creditContent.Val.text">
+        <div class="creditSample"><div class="info">請翻至卡片背後，位於簽名欄旁的三碼數字</div><img src="../assets/icons/svg/qa_card.svg" alt=""></div>
       </div>
       <div class="creditPhone">
         <label for="creditPhone" class="title">手機</label>
-        <input id="creditPhone" v-model.trim="creditPhone.text" type="text" placeholder="刷卡若採簡訊驗證，將發至您發卡銀行的手機號碼">
+        <input id="creditPhone" v-model.trim="creditContent.Phone.text" type="text" placeholder="刷卡若採簡訊驗證，將發至您發卡銀行的手機號碼">
       </div>
     </div>
   </div>
@@ -28,21 +28,23 @@
 export default {
   data () {
     return {
-      creditName: {
-        text: '',
-        valideate: false
-      },
-      creditNum: {
-        text: '',
-        valideate: false
-      },
-      creditValidate: {
-        text: '',
-        valideate: false
-      },
-      creditPhone: {
-        text: '',
-        valideate: false
+      creditContent: {
+        Number: {
+          text: '',
+          validate: true
+        },
+        Date: {
+          text: '',
+          validate: true
+        },
+        Val: {
+          text: '',
+          validate: true
+        },
+        Phone: {
+          text: '',
+          validate: true
+        }
       }
     }
   }
@@ -59,7 +61,7 @@ $lightGrayBorder: #e4e7ed;
 $orgBorder: #FA5555;
 
 $mediumBg:#f0f2f5;
-$lishtBg: #F5F7FA;
+$lightBg: #F5F7FA;
 
 $white: #fff;
 .creditInfo{
@@ -104,6 +106,7 @@ $white: #fff;
       color: #909399;
       padding-left: 15px;
     }
+    input:focus {outline: none; }
     .creditName{
       float: left;
       text-align: left;
@@ -117,6 +120,7 @@ $white: #fff;
       }
     }
     .creditNum{
+      position: relative;
       width: 50%;
       margin-bottom: 20px;
       float: left;
@@ -130,6 +134,7 @@ $white: #fff;
       }
     }
     .creditValidate{
+      position: relative;
       width: 50%;
       float: left;
       margin-bottom: 20px;
@@ -148,6 +153,25 @@ $white: #fff;
       }
       #creditPhone{
         width: 704px;
+      }
+    }
+    .creditSample{
+      width: 215px;
+      height: 85px;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+      align-items: center;
+      border: 1px solid $lightGrayBorder;
+      border-radius: 8px;
+      background: $lightBg;
+      position: absolute;
+      top: -200%;
+      right: -12%;
+      .info{
+        width: 60%;
+        font-size: 12px;
+        margin-right: 12px;
       }
     }
   }

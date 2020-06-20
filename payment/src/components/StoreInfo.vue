@@ -8,18 +8,10 @@
         </div>
         <div class="favStore">
           <img src="../assets/icons/svg/icon_like.svg" alt="">選擇常用門市
-          <div class="isFavStore">
-            <div class="isStore">
-              <div class="isStoreName">南山</div>
-              <div class="isStoreAdd">台北市大安區復興路999段99號1巷</div>
-            </div>
-            <div class="isStore">
-              <div class="isStoreName">台北車站</div>
-              <div class="isStoreAdd">台北市大安區復興路999段99號1巷</div>
-            </div>
-            <div class="isStore">
-              <div class="isStoreName">京站</div>
-              <div class="isStoreAdd">台北市大安區復興路999段99號1巷</div>
+          <div class="isFavStore" >
+            <div class="isStore" v-for="(item,idx) in favoriteStoreList" :key="idx" @click="userSelect(item)">
+              <div class="isStoreName">{{item.storeName}}</div>
+              <div class="isStoreAdd">{{item.storeAdd}}</div>
             </div>
           </div>
         </div>
@@ -29,20 +21,54 @@
       <div class="storeName">
         <div class="title">取貨店名</div>
         <div class="content">
-          <div class="name">復興</div>
-          <div class="addStore">
-            <img src="../assets/icons/svg/icon_star.svg" alt="">儲存至常用門市
+          <div class="name">{{selectFavoriteStore.storeName}}</div>
+          <div class="addStore" @click="addFavStore(selectFavoriteStore)">
+            <img src="../assets/icons/svg/icon_star.svg" alt="" >儲存至常用門市
           </div>
         </div>
       </div>
       <div class="storeAdd">
         <div class="title">取貨地址</div>
-        <div class="content">台北市大安區復興路999段99號1巷</div>
+        <div class="content">{{selectFavoriteStore.storeAdd}}</div>
       </div>
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  data () {
+    return {
+      favoriteStoreList: [
+        {
+          storeName: '南山',
+          storeAdd: '台北市大安區復興路999段99號9巷'
+        },
+        {
+          storeName: '台北車站',
+          storeAdd: '台北市大安區復興路666段66號6巷'
+        },
+        {
+          storeName: '京站',
+          storeAdd: '台北市大安區復興路333段33號3巷'
+        }
+      ],
+      selectFavoriteStore: {
+        storeName: '復興',
+        storeAdd: '台北市大安區復興路111段11號1巷'
+      }
+    }
+  },
+  methods: {
+    userSelect (item) {
+      console.log(item)
+      this.selectFavoriteStore = item
+    },
+    addFavStore (item) {
+      this.favoriteStoreList.push({ storeName: item.storeName, storeAdd: item.storeAdd })
+    }
+  }
+}
+</script>
 <style lang="scss" scoped>
 $main: #4BC9C9;
 $darkBlackText: #303133;
@@ -110,6 +136,11 @@ $white: #fff;
     .isStoreAdd{
       font-size: 12px;
       color: $lightBlackText;
+    }
+  }
+  @media(max-width:1000px){
+    .isFavStore{
+      left: 0;
     }
   }
   .storeContent{
