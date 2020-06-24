@@ -17,7 +17,10 @@ const config = {
       debug: true
     }
   },
-  scene: [gameStart,gamePlay,]
+  scene: [
+    gameStart,
+    gamePlay,
+  ]
 
 }
 
